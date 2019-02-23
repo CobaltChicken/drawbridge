@@ -1,0 +1,19 @@
+{
+  "name": "drawbridge",
+  "version": "1.0.0",
+  "description": "Lambda for emergency shutdown of public facing services",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "drawbridge",
+    "aws"
+  ],
+  "author": "Malcolm McMahon",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.409.0",
+    "aws-sdk-mock": "^4.3.1"
+  }
+}

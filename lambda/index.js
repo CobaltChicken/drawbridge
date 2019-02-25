@@ -9,61 +9,64 @@
 const ConfirmSubject = 'Drawbridge is up!';
 const subSystems = process.env.SUBSYSTEMS.split(',').map(str => str.trim());
 const topic = process.env.TOPIC_ARN;
-const sns = require('aws-sdk/clients/sns');
+const AWS = require('aws-sdk');
+AWS.config.update({
+    httpOptions: {
+        timeout: 500, connectionTimeout: 10000
+    },
+    region: 'eu-west-1'
+});
+const sns = new AWS.SNS();
+
 /**
  * Map the names from SUBSYSTEMS into the JS module path
  */
 const modules = {
-    cloudfront : './systems/cloudfront.js'
+    cloudfront: './systems/cloudfront.js',
+    s3: './systems/s3.js'
 };
 /**
  * Sends an SMS message to the phone number in MOBILE_NUMBER
  * @param  msg The payload for the message
  */
-function sendSms(msg) {
-    return new Promise((resolve, reject) => {
-        let params = {
-            PhoneNumber: process.env.MOBILE_NUMBER,
-            Message: msg,
-            Subject: 'Drawbrige Raise Results',
-        };
-        sns.publish(params, (err, data) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(data);
-            }
-        });
-    });
+function sendSms(msg, phone) {
+    let params = {
+        PhoneNumber: phone,
+        Message: msg,
+        Subject: ConfirmSubject,
+    };
+    return sns.publish(params).promise()
 }
 exports.handler = async (event) => {
-    let panic = false;
-    for (let record of event.Records) {
-        if (record.EventSource === 'aws.sns' && record.Sns.Subject !== ConfirmSubject) {
-            panic = true;
-        }
-    }
-    if (panic) { // If any message is not our confirm then raise the drawbridge. The Hordes are upon us.
-        console.log('Zombie hords sited - Raise the drawbridge');
-        let narrative = "Lock out results";
-        for (let ss of subSystems) {
-            let module = modules[ss.toLowerCase];
-            if (module) {
-                try {
-                    narrative += '\n' + ss + await require(module).lockOut();
-                } catch (err) {
-                    narrative += '\n' + ss + `FAIL ${err.message}`;
-                    console.error('Error in ' + ss + JSON.stringify(err));
-                    console.error(err.message, err.stackTrace);
+    let panic = event.Records.some(record => record.EventSource === 'aws:sns');
+    try {
+        if (panic) { // If any message is not our confirm then raise the drawbridge. The Hordes are upon us.
+            console.log('Zombie hoards in sight - Raise the drawbridge');
+            let narrative = "Lock out results";
+            for (let ss of subSystems) {
+                let module = modules[ss.toLowerCase()];
+                if (module) {
+                    try {
+                        narrative += '\n' + ss + ': ' + await require(module).lockOut();
+                    } catch (err) {
+                        narrative += '\n' + ss + `: FAIL ${err.message}`;
+                        console.error('Error in ' + ss + JSON.stringify(err));
+                        console.error(err.message, err.stack);
+                    }
+                } else {
+                    console.error(`Don't know ${ss} subsystem`);
                 }
-            } else {
-                console.error(`Don't know $(ss} subsystem`);
             }
+            if(process.env.MOBILE_NUMBER) {
+                await Promise.all(process.env.MOBILE_NUMBER.split(',').map(phone => sendSms(narrative, phone)));
+            }
+            return 'Drawbridge raised';
         }
-        await sendSms(narrative);
-        return 'Drawbridge raised';
+        return 'No panic';
+    } catch (err) {
+        console.error(err.message, err.stack);
+        return "ERROR: " + err.message;
     }
-    return 'No panic';
 };
 
 

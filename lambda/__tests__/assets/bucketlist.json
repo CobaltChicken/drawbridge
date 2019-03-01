@@ -1,0 +1,20 @@
+{
+    "Buckets": [
+        {
+            "Name": "assets.theriomorph.me.uk",
+            "CreationDate": "2019-02-24T18:03:59.000Z"
+        },
+        {
+            "Name": "aws.theriomorph.me.uk",
+            "CreationDate": "2019-02-24T17:34:57.000Z"
+        },
+        {
+            "Name": "publictest.theriomorph.me.uk",
+            "CreationDate": "2019-03-01T20:25:40.000Z"
+        }
+    ],
+    "Owner": {
+        "DisplayName": "cobaltchicken",
+        "ID": "f4a75113f14e0df89b1d6f5016f7081dc7f1f127a68080fb49d3a01ec13ed7f1"
+    }
+}

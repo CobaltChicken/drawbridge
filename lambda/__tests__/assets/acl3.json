@@ -1,0 +1,67 @@
+[
+    {
+        "Owner": {
+            "DisplayName": "cobaltchicken",
+            "ID": "f4a75113f14e0df89b1d6f5016f7081dc7f1f127a68080fb49d3a01ec13ed7f1"
+        },
+        "Grants": [
+            {
+                "Grantee": {
+                    "DisplayName": "cobaltchicken",
+                    "ID": "f4a75113f14e0df89b1d6f5016f7081dc7f1f127a68080fb49d3a01ec13ed7f1",
+                    "Type": "CanonicalUser"
+                },
+                "Permission": "FULL_CONTROL"
+            }
+        ]
+    }
+    ,
+    {
+        "Owner": {
+            "DisplayName": "cobaltchicken",
+            "ID": "f4a75113f14e0df89b1d6f5016f7081dc7f1f127a68080fb49d3a01ec13ed7f1"
+        },
+        "Grants": [
+            {
+                "Grantee": {
+                    "DisplayName": "cobaltchicken",
+                    "ID": "f4a75113f14e0df89b1d6f5016f7081dc7f1f127a68080fb49d3a01ec13ed7f1",
+                    "Type": "CanonicalUser"
+                },
+                "Permission": "FULL_CONTROL"
+            },
+            {
+                "Grantee": {
+                    "DisplayName": "awslogsdelivery+s3_us-east-1",
+                    "ID": "c4c1ede66af53448b93c283ce9448c4ba468c9432aa01d700d3878632f77d2d0",
+                    "Type": "CanonicalUser"
+                },
+                "Permission": "FULL_CONTROL"
+            }
+        ]
+    }
+    ,
+    {
+        "Owner": {
+            "DisplayName": "cobaltchicken",
+            "ID": "f4a75113f14e0df89b1d6f5016f7081dc7f1f127a68080fb49d3a01ec13ed7f1"
+        },
+        "Grants": [
+            {
+                "Grantee": {
+                    "DisplayName": "cobaltchicken",
+                    "ID": "f4a75113f14e0df89b1d6f5016f7081dc7f1f127a68080fb49d3a01ec13ed7f1",
+                    "Type": "CanonicalUser"
+                },
+                "Permission": "FULL_CONTROL"
+            },
+            {
+                "Grantee": {
+                    "Type": "Group",
+                    "URI": "http://acs.amazonaws.com/groups/s3/LogDelivery"
+                },
+                "Permission": "READ"
+            }
+        ]
+    }
+    ]

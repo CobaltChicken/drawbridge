@@ -1,0 +1,107 @@
+{
+    "ETag": "E2JYX7YC3XEP66",
+    "DistributionConfig": {
+        "CallerReference": "1551029695933",
+        "Aliases": {
+            "Quantity": 0,
+            "Items": []
+        },
+        "DefaultRootObject": "",
+        "Origins": {
+            "Quantity": 1,
+            "Items": [
+                {
+                    "Id": "S3-assets.theriomorph.me.uk",
+                    "DomainName": "assets.theriomorph.me.uk.s3.amazonaws.com",
+                    "OriginPath": "",
+                    "CustomHeaders": {
+                        "Quantity": 0,
+                        "Items": []
+                    },
+                    "S3OriginConfig": {
+                        "OriginAccessIdentity": "origin-access-identity/cloudfront/E3ER5YMTJHFV7O"
+                    }
+                }
+            ]
+        },
+        "DefaultCacheBehavior": {
+            "TargetOriginId": "S3-assets.theriomorph.me.uk",
+            "ForwardedValues": {
+                "QueryString": false,
+                "Cookies": {
+                    "Forward": "none"
+                },
+                "Headers": {
+                    "Quantity": 0,
+                    "Items": []
+                },
+                "QueryStringCacheKeys": {
+                    "Quantity": 0,
+                    "Items": []
+                }
+            },
+            "TrustedSigners": {
+                "Enabled": false,
+                "Quantity": 0,
+                "Items": []
+            },
+            "ViewerProtocolPolicy": "allow-all",
+            "MinTTL": 0,
+            "AllowedMethods": {
+                "Quantity": 2,
+                "Items": [
+                    "HEAD",
+                    "GET"
+                ],
+                "CachedMethods": {
+                    "Quantity": 2,
+                    "Items": [
+                        "HEAD",
+                        "GET"
+                    ]
+                }
+            },
+            "SmoothStreaming": false,
+            "DefaultTTL": 86400,
+            "MaxTTL": 31536000,
+            "Compress": false,
+            "LambdaFunctionAssociations": {
+                "Quantity": 0,
+                "Items": []
+            },
+            "FieldLevelEncryptionId": ""
+        },
+        "CacheBehaviors": {
+            "Quantity": 0,
+            "Items": []
+        },
+        "CustomErrorResponses": {
+            "Quantity": 0,
+            "Items": []
+        },
+        "Comment": "Assets for Alexa",
+        "Logging": {
+            "Enabled": true,
+            "IncludeCookies": false,
+            "Bucket": "aws.theriomorph.me.uk.s3.amazonaws.com",
+            "Prefix": "asset-dist"
+        },
+        "PriceClass": "PriceClass_100",
+        "Enabled": true,
+        "ViewerCertificate": {
+            "CloudFrontDefaultCertificate": true,
+            "MinimumProtocolVersion": "TLSv1",
+            "CertificateSource": "cloudfront"
+        },
+        "Restrictions": {
+            "GeoRestriction": {
+                "RestrictionType": "none",
+                "Quantity": 0,
+                "Items": []
+            }
+        },
+        "WebACLId": "",
+        "HttpVersion": "http2",
+        "IsIPV6Enabled": true
+    }
+}

@@ -16,7 +16,6 @@ AWS.config.update({
     },
     region: 'eu-west-1'
 });
-const sns = new AWS.SNS();
 
 /**
  * Map the names from SUBSYSTEMS into the JS module path
@@ -29,16 +28,17 @@ const modules = {
  * Sends an SMS message to the phone number in MOBILE_NUMBER
  * @param  msg The payload for the message
  */
-function sendSms(msg, phone) {
-    let params = {
-        PhoneNumber: phone,
-        Message: msg,
-        Subject: ConfirmSubject,
-    };
-    return sns.publish(params).promise()
-}
 exports.handler = async (event) => {
-    let panic = event.Records.some(record => record.EventSource === 'aws:sns');
+    const sns = new AWS.SNS();
+    function sendSms(msg, phone) {
+        let params = {
+            PhoneNumber: phone,
+            Message: msg,
+            Subject: ConfirmSubject,
+        };
+        return sns.publish(params).promise()
+    }
+        let panic = event.Records.some(record => record.EventSource === 'aws:sns');
     try {
         if (panic) { // If any message is not our confirm then raise the drawbridge. The Hordes are upon us.
             console.log('Zombie hoards in sight - Raise the drawbridge');

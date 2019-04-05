@@ -9,25 +9,25 @@ exports.lockOut = async () => {
         names.map(name => s3.getBucketAcl({ Bucket: name }).promise())
     );
     let totalBuckets = names.length;
-    let wsFlags = await Promise.all(names.map(async name =>  {
+    let wsFlags = await Promise.all(names.map(async name => {
         try {
-            let web = await s3.getBucketWebsite({Bucket: name}).promise();
+            let web = await s3.getBucketWebsite({ Bucket: name }).promise();
             return true;
-        } catch(err) {
+        } catch (err) {
             console.log(JSON.stringify(err));
-            if(err.code === 'NoSuchWebsiteConfiguration') {
+            if (err.code === 'NoSuchWebsiteConfiguration') {
                 return false;
             } else {
                 console.error(err);
                 throw err;
             }
-            
+
         }
     }));
     let bucketData = acls.map(acl => (
-          {
+        {
             name: names.shift(),
-            webSite : wsFlags.shift(),
+            webSite: wsFlags.shift(),
             acl: acl,
             grants: acl.Grants
         }
@@ -36,8 +36,9 @@ exports.lockOut = async () => {
         entry.acl.Grants.some(
             gr => gr.Grantee.URI === publicUri)
     );
+    let resultString = '';
     if (acls.length === 0) {
-        return `${totalBuckets} buckets, none of them publically accesible`;
+        resultString = `${totalBuckets} buckets, none of them publically accesible`;
     } else {
         await Promise.all(acls.map(entry => s3.putBucketAcl({
             AccessControlPolicy: {
@@ -46,13 +47,18 @@ exports.lockOut = async () => {
             },
             Bucket: entry.name
         }).promise()));
-        return 'Blocked: ' + acls.map(entry => entry.name).join(', ');
+        resultString += 'Blocked: ' + acls.map(entry => entry.name).join(', ');
     }
-    if(bucketData.some(entry => entry.webSite)) {
+    if (bucketData.some(entry => entry.webSite)) {
         console.log('Deleting web site data');
+        resultString += '\nDeleting web site data from:' + bucketData
+            .filter(bd => bd.website)
+            .map(bd => bd.name)
+            .join(', ');
         await Promise.all(bucketData.filter(bd => bd.webSite)
-        .map(bd => s3.deleteBucketWebsite({Bucket: db.name})
-        .promise()));
+            .map(bd => s3.deleteBucketWebsite({ Bucket: bd.name })
+                .promise()));
     }
+    return resultString;
 
 };

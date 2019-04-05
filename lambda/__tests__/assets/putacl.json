@@ -1,0 +1,22 @@
+{
+    "AccessControlPolicy": {
+        "Grants": [
+            {
+                "Grantee": {
+                    "DisplayName": "cobaltchicken",
+                    "ID": "f4a75113f14e0df89b1d6f5016f7081dc7f1f127a68080fb49d3a01ec13ed7f1",
+                    "Type": "CanonicalUser"
+                },
+                "Permission": "FULL_CONTROL"
+            },
+            {
+                "Grantee": {
+                    "Type": "Group",
+                    "URI": "http://acs.amazonaws.com/groups/s3/LogDelivery"
+                },
+                "Permission": "READ"
+            }
+        ]
+    },
+    "Bucket": "testpublic.theriomorph.me.uk"
+}

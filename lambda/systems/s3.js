@@ -9,13 +9,30 @@ exports.lockOut = async () => {
         names.map(name => s3.getBucketAcl({ Bucket: name }).promise())
     );
     let totalBuckets = names.length;
-    acls = acls.map(acl => (
+    let wsFlags = await Promise.all(names.map(async name =>  {
+        try {
+            let web = await s3.getBucketWebsite({Bucket: name}).promise();
+            return true;
+        } catch(err) {
+            console.log(JSON.stringify(err));
+            if(err.code === 'NoSuchWebsiteConfiguration') {
+                return false;
+            } else {
+                console.error(err);
+                throw err;
+            }
+            
+        }
+    }));
+    let bucketData = acls.map(acl => (
           {
             name: names.shift(),
+            webSite : wsFlags.shift(),
             acl: acl,
             grants: acl.Grants
         }
-    )).filter(entry =>
+    ));
+    acls = bucketData.filter(entry =>
         entry.acl.Grants.some(
             gr => gr.Grantee.URI === publicUri)
     );
@@ -30,6 +47,12 @@ exports.lockOut = async () => {
             Bucket: entry.name
         }).promise()));
         return 'Blocked: ' + acls.map(entry => entry.name).join(', ');
+    }
+    if(bucketData.some(entry => entry.webSite)) {
+        console.log('Deleting web site data');
+        await Promise.all(bucketData.filter(bd => bd.webSite)
+        .map(bd => s3.deleteBucketWebsite({Bucket: db.name})
+        .promise()));
     }
 
 };

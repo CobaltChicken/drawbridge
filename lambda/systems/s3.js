@@ -52,7 +52,7 @@ exports.lockOut = async () => {
     if (bucketData.some(entry => entry.webSite)) {
         console.log('Deleting web site data');
         resultString += '\nDeleting web site data from:' + bucketData
-            .filter(bd => bd.website)
+            .filter(bd => bd.webSite)
             .map(bd => bd.name)
             .join(', ');
         await Promise.all(bucketData.filter(bd => bd.webSite)

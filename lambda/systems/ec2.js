@@ -41,7 +41,7 @@ exports.lockOut = async () => {
                 }
             ).promise();
         return response + result.StoppingInstances
-            .map(si => `EC2 Inst: ${si.InstanceId} state now ${si.CurrentState.Name}`)
+            .map(si => `EC2 Inst: ${si.InstanceId} now ${si.CurrentState.Name}`)
             .join('\n');
 
     } else {

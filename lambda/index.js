@@ -58,6 +58,7 @@ exports.handler = async (event) => {
                     console.error(`Don't know ${ss} subsystem`);
                 }
             }
+            console.log(narrative);
             if(process.env.MOBILE_NUMBER) {
                 await Promise.all(process.env.MOBILE_NUMBER.split(',').map(phone => sendSms(narrative, phone)));
             }

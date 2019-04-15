@@ -1,7 +1,7 @@
 "use strict";
 
 process.env.MOBILE_NUMBER = '+44 7720 88888';
-process.env.SUBSYSTEMS = 'CloudFront,S3';
+process.env.SUBSYSTEMS = 'CloudFront,S3,ec2';
 process.env.TOPIC_ARN = 'arn:aws:sns:eu-west-1:278795638469:spend-limit';
 
 const index = require('../index');
@@ -28,6 +28,18 @@ describe('Tests of main script', () => {
         AWS.mock('S3', 'getBucketAcl', options => {
             expect(options.Bucket).toBeDefined();
             return Promise.resolve(acls[bucketOrder[options.Bucket]]);
+        });
+        AWS.mock('S3', "getBucketWebsite", options => {
+            let err = new Error('NoSuchWebsiteConfiguration');
+            err.code = 'NoSuchWebsiteConfiguration';
+            return Promise.reject(err);
+        });
+    
+        AWS.mock('EC2', 'describeInstances', options=> {
+            expect(options.Filters.length).toEqual(1);
+            return Promise.resolve({
+                Reservations: []
+            });
         });
         let result = await index.handler(event);
         console.log('Result', JSON.stringify(result));

@@ -22,7 +22,8 @@ AWS.config.update({
  */
 const modules = {
     cloudfront: './systems/cloudfront.js',
-    s3: './systems/s3.js'
+    s3: './systems/s3.js',
+    ec2: './systems/ec2.js'
 };
 /**
  * Sends an SMS message to the phone number in MOBILE_NUMBER
